@@ -1,4 +1,4 @@
-import { ai } from './geminiClient';
+import { getAI, getApiKey } from './geminiClient';
 import { patchSchema } from './schemas';
 import { SYSTEM_PROMPTS } from './prompts';
 import { Trip, ChangeSummary } from '../../types';
@@ -9,15 +9,16 @@ export async function applyEditAI(
   userRequest: string,
   classification: any
 ): Promise<{ updatedTrip: Trip; changeSummary: ChangeSummary }> {
-  const hasApiKey = (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) || 
-                   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY);
+  const apiKey = getApiKey();
 
-  if (!hasApiKey) {
+  if (!apiKey) {
     return {
       updatedTrip: { ...currentTrip },
       changeSummary: mockChangeSummary
     };
   }
+
+  const ai = getAI();
   const prompt = `Apply the requested edit to the current trip.
 Current Trip JSON:
 ${JSON.stringify(currentTrip, null, 2)}
@@ -30,7 +31,7 @@ ${JSON.stringify(classification, null, 2)}
 ${SYSTEM_PROMPTS.APPLY_EDIT}`;
 
   const response = await ai.models.generateContent({
-    model: "gemini-3.1-pro-preview",
+    model: "gemini-3-flash-preview",
     contents: prompt,
     config: {
       responseMimeType: "application/json",

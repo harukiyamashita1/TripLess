@@ -21,7 +21,7 @@ const TRIP_TYPES = [
 
 export default function CreateTrip() {
   const navigate = useNavigate();
-  const { addTrip } = useTripStore();
+  const { addTrip, user } = useTripStore();
   
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -46,7 +46,7 @@ export default function CreateTrip() {
     
     try {
       const finalBudget = budgetMode === 'exact' && exactBudget ? `Exact amount: $${exactBudget}` : budgetStyle;
-      const trip = await generateTrip(destination, startDate, endDate, travelers, finalBudget, pace, tripType, additionalNotes);
+      const trip = await generateTrip(destination, startDate, endDate, travelers, finalBudget, pace, tripType, additionalNotes, user?.id);
       trip.id = uuidv4(); // Ensure unique ID
       addTrip(trip);
       navigate(`/trip/${trip.id}`);

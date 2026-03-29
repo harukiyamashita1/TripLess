@@ -6,6 +6,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { TripProvider } from './store/TripContext';
 import { AnimatePresence } from 'motion/react';
+import KeySelectionGuard from './components/KeySelectionGuard';
 import Home from './pages/Home';
 import CreateTrip from './pages/CreateTrip';
 import LoadingTrip from './pages/LoadingTrip';
@@ -31,11 +32,13 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <TripProvider>
-      <BrowserRouter>
-        <div className="min-h-screen bg-zinc-50 text-zinc-950 font-sans selection:bg-zinc-200 flex flex-col">
-          <AnimatedRoutes />
-        </div>
-      </BrowserRouter>
+      <KeySelectionGuard>
+        <BrowserRouter>
+          <div className="min-h-screen bg-zinc-50 text-zinc-950 font-sans selection:bg-zinc-200 flex flex-col">
+            <AnimatedRoutes />
+          </div>
+        </BrowserRouter>
+      </KeySelectionGuard>
     </TripProvider>
   );
 }

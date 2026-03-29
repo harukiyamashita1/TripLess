@@ -1,4 +1,10 @@
 import { Trip, ChangeSummary } from "../types";
+import { generateTripAI } from "./ai/generateTrip";
+import { classifyEditAI } from "./ai/classifyEdit";
+import { applyEditAI } from "./ai/applyEdit";
+import { tripRepository } from "../lib/repositories/trips";
+import { editRepository } from "../lib/repositories/edits";
+import { v4 as uuidv4 } from "uuid";
 
 export async function generateTrip(
   destination: string,
@@ -8,45 +14,54 @@ export async function generateTrip(
   budgetStyle: string,
   pace: string,
   tripType: string,
-  additionalNotes: string
+  additionalNotes: string,
+  userId?: string
 ): Promise<Trip> {
-  const response = await fetch('/api/trips/generate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      destination,
-      startDate,
-      endDate,
-      travelers,
-      budgetStyle,
-      pace,
-      tripType,
-      additionalNotes
-    })
-  });
+  const trip = await generateTripAI(
+    destination,
+    startDate,
+    endDate,
+    travelers,
+    budgetStyle,
+    pace,
+    tripType,
+    additionalNotes
+  );
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Failed to generate trip');
+  // Ensure ID is set
+  if (!trip.id) trip.id = uuidv4();
+
+  // If user is logged in, save to Supabase
+  if (userId) {
+    await tripRepository.createTrip(trip, userId);
   }
 
-  return await response.json();
+  return trip;
 }
 
 export async function refineTrip(
   currentTrip: Trip,
-  userRequest: string
+  userRequest: string,
+  userId?: string
 ): Promise<{ updatedTrip: Trip; changeSummary: ChangeSummary }> {
-  const response = await fetch('/api/trips/refine', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ currentTrip, userRequest })
-  });
+  // 1. Classify the edit
+  const classification = await classifyEditAI(currentTrip, userRequest);
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Failed to refine trip');
+  // 2. Apply the edit
+  const { updatedTrip, changeSummary } = await applyEditAI(currentTrip, userRequest, classification);
+
+  // 3. If user is logged in, save the edit and update the trip
+  if (userId) {
+    await editRepository.saveEdit(
+      currentTrip.id,
+      userId,
+      userRequest,
+      classification,
+      { updatedTrip, changeSummary },
+      changeSummary
+    );
+    await tripRepository.updateTrip(updatedTrip);
   }
 
-  return await response.json();
+  return { updatedTrip, changeSummary };
 }

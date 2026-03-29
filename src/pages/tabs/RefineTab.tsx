@@ -24,7 +24,7 @@ const SUGGESTIONS = [
 ];
 
 export default function RefineTab({ trip }: { trip: Trip }) {
-  const { updateTrip } = useTripStore();
+  const { updateTrip, user } = useTripStore();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -53,7 +53,7 @@ export default function RefineTab({ trip }: { trip: Trip }) {
     setIsRefining(true);
 
     try {
-      const { updatedTrip, changeSummary } = await refineTrip(trip, text);
+      const { updatedTrip, changeSummary } = await refineTrip(trip, text, user?.id);
       updateTrip(updatedTrip);
       
       setMessages(prev => [

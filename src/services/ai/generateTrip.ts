@@ -1,4 +1,4 @@
-import { ai } from './geminiClient';
+import { getAI, getApiKey } from './geminiClient';
 import { tripSchema } from './schemas';
 import { SYSTEM_PROMPTS } from './prompts';
 import { Trip } from '../../types';
@@ -14,10 +14,9 @@ export async function generateTripAI(
   tripType: string,
   additionalNotes: string
 ): Promise<Trip> {
-  const hasApiKey = (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) || 
-                   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY);
+  const apiKey = getApiKey();
 
-  if (!hasApiKey) {
+  if (!apiKey) {
     console.warn('GEMINI_API_KEY is missing. Using mock data.');
     return {
       ...mockTrip,
@@ -29,6 +28,8 @@ export async function generateTripAI(
       pace: pace as any
     };
   }
+
+  const ai = getAI();
   const destPrompt = destination 
     ? `for ${destination}` 
     : `for a highly recommended, amazing travel destination that fits the time of year, budget, and pace`;
@@ -43,7 +44,7 @@ If no specific destination was provided, pick a fantastic destination and make s
   }
 
   const response = await ai.models.generateContent({
-    model: "gemini-3.1-pro-preview",
+    model: "gemini-3-flash-preview",
     contents: prompt,
     config: {
       responseMimeType: "application/json",

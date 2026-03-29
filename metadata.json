@@ -1,0 +1,5 @@
+{
+  "name": "TripLess",
+  "description": "An AI travel concierge that builds full trips from minimal input and allows stable, localized edits.",
+  "requestFramePermissions": []
+}

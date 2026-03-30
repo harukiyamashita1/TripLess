@@ -30,8 +30,22 @@ export async function generateTripAI(
   }
 
   const ai = getAI();
-  const destPrompt = destination 
-    ? `for ${destination}` 
+
+  if (!ai) {
+    console.warn('Gemini client unavailable. Using mock data.');
+    return {
+      ...mockTrip,
+      destination: destination || mockTrip.destination,
+      startDate,
+      endDate,
+      travelers,
+      budgetStyle: budgetStyle as any,
+      pace: pace as any
+    };
+  }
+
+  const destPrompt = destination
+    ? `for ${destination}`
     : `for a highly recommended, amazing travel destination that fits the time of year, budget, and pace`;
 
   let prompt = `Create a realistic, highly curated travel itinerary ${destPrompt} from ${startDate} to ${endDate} for ${travelers} people.

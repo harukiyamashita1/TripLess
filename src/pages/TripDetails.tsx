@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useTripStore } from '../store/TripContext';
-import { ArrowLeft, Map, Bed, CalendarDays, Sparkles, Navigation } from 'lucide-react';
+import { ArrowLeft, Map, Bed, CalendarDays, Sparkles, Navigation, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { OtterMascot } from '../components/OtterMascot';
+import { calculateTripEngagement } from '../lib/tripEngagement';
+import { Badge } from '../components/ui/Badge';
 
 import OverviewTab from './tabs/OverviewTab';
 import StayTab from './tabs/StayTab';
@@ -28,6 +30,8 @@ export default function TripDetails() {
     );
   }
 
+  const engagement = calculateTripEngagement(trip);
+
   const tabs = [
     { id: 'overview', label: 'Overview', icon: Map, path: '' },
     { id: 'stay', label: 'Stay', icon: Bed, path: 'stay' },
@@ -46,18 +50,29 @@ export default function TripDetails() {
       transition={{ duration: 0.3 }}
       className="flex flex-col h-full min-h-screen bg-zinc-50"
     >
-      <header className="px-6 py-4 bg-white border-b border-zinc-200 flex items-center sticky top-0 z-50">
-        <button onClick={() => navigate('/')} className="p-2 -ml-2 mr-4 rounded-full hover:bg-zinc-100 transition-colors">
-          <ArrowLeft className="h-5 w-5 text-zinc-900" />
-        </button>
+      <header className="px-6 py-4 bg-white border-b border-zinc-200 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-3 flex-1 min-w-0">
+          <button onClick={() => navigate('/')} className="p-2 -ml-2 mr-2 rounded-full hover:bg-zinc-100 transition-colors">
+            <ArrowLeft className="h-5 w-5 text-zinc-900" />
+          </button>
           <div className="w-10 h-10 bg-brand/10 rounded-full flex items-center justify-center border border-brand/20 shrink-0 hidden sm:flex">
             <OtterMascot className="w-6 h-6 drop-shadow-sm" />
           </div>
           <div className="min-w-0">
-            <h1 className="text-xl font-semibold tracking-tight truncate">{trip.destination}</h1>
+            <h1 className="text-xl font-semibold tracking-tight truncate flex items-center gap-3">
+              {trip.destination}
+              <Badge variant="secondary" className="hidden md:inline-flex bg-zinc-100 text-zinc-600 font-medium border-zinc-200">
+                <Activity className="w-3 h-3 mr-1.5 text-brand" />
+                {engagement.statusLabel}
+              </Badge>
+            </h1>
             <p className="text-sm text-zinc-500 truncate">{trip.startDate} - {trip.endDate}</p>
           </div>
+        </div>
+        
+        <div className="hidden lg:flex items-center gap-2 text-sm text-zinc-500 bg-zinc-50 px-4 py-2 rounded-full border border-zinc-100">
+          <Sparkles className="w-4 h-4 text-brand-light" />
+          <span>Next step: <span className="font-medium text-zinc-700">{engagement.nextBestAction}</span></span>
         </div>
       </header>
 

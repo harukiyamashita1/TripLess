@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTripStore } from '../store/TripContext';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/Card';
-import { Plus, MapPin, Calendar, Compass, LogOut, ArrowRight, Sparkles } from 'lucide-react';
+import { Plus, MapPin, Calendar, Compass, LogOut, ArrowRight, Sparkles, Trash2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { OtterMascot } from '../components/OtterMascot';
 
@@ -23,12 +23,30 @@ export const getDestinationGradient = (name: string) => {
 };
 
 export default function Home() {
-  const { trips, user, logout } = useTripStore();
+  const { trips, user, logout, deleteTrip } = useTripStore();
   const navigate = useNavigate();
+
+  const [tripToDelete, setTripToDelete] = React.useState<{id: string, destination: string} | null>(null);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent, tripId: string, destination: string) => {
+    e.stopPropagation();
+    setTripToDelete({ id: tripId, destination });
+  };
+
+  const confirmDelete = () => {
+    if (tripToDelete) {
+      deleteTrip(tripToDelete.id);
+      setTripToDelete(null);
+    }
+  };
+
+  const cancelDelete = () => {
+    setTripToDelete(null);
   };
 
   return (
@@ -174,9 +192,19 @@ export default function Home() {
                           {trip.summary.description}
                         </p>
                         
-                        <div className="mt-6 pt-4 border-t border-zinc-100 flex items-center justify-between text-sm font-medium text-zinc-400 group-hover:text-brand transition-colors">
-                          <span>View Itinerary</span>
-                          <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
+                        <div className="mt-6 pt-4 border-t border-zinc-100 flex items-center justify-between text-sm font-medium">
+                          <div className="flex items-center text-zinc-400 group-hover:text-brand transition-colors">
+                            <span>View Itinerary</span>
+                            <ArrowRight className="w-4 h-4 ml-1.5 transform group-hover:translate-x-1 transition-transform" />
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0 text-zinc-400 hover:text-red-500 hover:bg-red-50 rounded-full z-10"
+                            onClick={(e) => handleDeleteClick(e, trip.id, trip.destination)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
                         </div>
                       </CardContent>
                     </Card>
@@ -201,6 +229,30 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Delete Confirmation Modal */}
+      {tripToDelete && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl"
+          >
+            <h3 className="text-xl font-semibold text-zinc-900 mb-2">Delete Journey</h3>
+            <p className="text-zinc-600 mb-6">
+              Delete "{tripToDelete.destination}"? This cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button variant="outline" onClick={cancelDelete}>
+                Cancel
+              </Button>
+              <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={confirmDelete}>
+                Delete
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </motion.div>
   );
 }

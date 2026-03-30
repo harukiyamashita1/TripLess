@@ -20,17 +20,6 @@ export async function classifyEditAI(
   }
 
   const ai = getAI();
-
-  if (!ai) {
-    return {
-      edit_type: 'local',
-      target_module: 'hotel',
-      affected_days: [],
-      requires_timeline_recalc: false,
-      explanation: "Mock classification for local edit."
-    };
-  }
-
   const prompt = `Analyze the user's edit request for their current trip.
 Current Trip JSON:
 ${JSON.stringify(currentTrip, null, 2)}

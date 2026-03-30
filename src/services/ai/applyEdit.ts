@@ -19,14 +19,6 @@ export async function applyEditAI(
   }
 
   const ai = getAI();
-
-  if (!ai) {
-    return {
-      updatedTrip: { ...currentTrip },
-      changeSummary: mockChangeSummary
-    };
-  }
-
   const prompt = `Apply the requested edit to the current trip.
 Current Trip JSON:
 ${JSON.stringify(currentTrip, null, 2)}

@@ -48,7 +48,7 @@ export default function StayTab({ trip }: { trip: Trip }) {
               transition={{ delay: index * 0.1 }}
               className="group h-full"
             >
-              <Card className="overflow-hidden border-zinc-200 shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col rounded-2xl">
+              <Card className="overflow-hidden border-zinc-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full flex flex-col rounded-2xl cursor-pointer">
                 <div className="relative h-48 overflow-hidden">
                   <img 
                     src={`https://picsum.photos/seed/${hotel.name.replace(/\s+/g, '')}/600/400`} 
@@ -71,7 +71,7 @@ export default function StayTab({ trip }: { trip: Trip }) {
                   
                   <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-zinc-100">
                     {hotel.tags.map(tag => (
-                      <Badge key={tag} variant="secondary" className="text-xs px-2.5 py-1 bg-zinc-100 text-zinc-700 font-medium rounded-lg">
+                      <Badge key={tag} variant="secondary" className="text-xs px-2.5 py-1 bg-zinc-100 text-zinc-700 font-medium rounded-lg transition-colors group-hover:bg-zinc-200">
                         {tag}
                       </Badge>
                     ))}

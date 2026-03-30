@@ -50,8 +50,8 @@ export default function ItineraryTab({ trip }: { trip: Trip }) {
           </p>
         </div>
         <div className="flex gap-2">
-          <button onClick={expandAll} className="text-sm font-medium text-brand hover:text-brand-hover px-3 py-1.5 rounded-lg hover:bg-brand/5 transition-colors">Expand All</button>
-          <button onClick={collapseAll} className="text-sm font-medium text-zinc-500 hover:text-zinc-800 px-3 py-1.5 rounded-lg hover:bg-zinc-100 transition-colors">Collapse All</button>
+          <button onClick={expandAll} className="text-sm font-medium text-brand hover:text-brand-hover px-3 py-1.5 rounded-lg hover:bg-brand/5 transition-colors active:scale-95">Expand All</button>
+          <button onClick={collapseAll} className="text-sm font-medium text-zinc-500 hover:text-zinc-800 px-3 py-1.5 rounded-lg hover:bg-zinc-100 transition-colors active:scale-95">Collapse All</button>
         </div>
       </div>
 
@@ -66,7 +66,7 @@ export default function ItineraryTab({ trip }: { trip: Trip }) {
             <Card className="overflow-hidden border-zinc-200 shadow-sm hover:shadow-md transition-shadow rounded-2xl">
               <button 
                 onClick={() => toggleDay(day.dayNumber)}
-                className="w-full flex items-center justify-between p-5 md:p-6 bg-white hover:bg-zinc-50 transition-colors"
+                className="w-full flex items-center justify-between p-5 md:p-6 bg-white hover:bg-zinc-50 transition-colors active:bg-zinc-100"
               >
                 <div className="text-left flex items-center gap-4 md:gap-6">
                   <div className="bg-brand/10 text-brand font-bold text-xl md:text-2xl w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center shrink-0">

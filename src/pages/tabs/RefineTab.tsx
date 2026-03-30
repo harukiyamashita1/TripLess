@@ -194,7 +194,7 @@ export default function RefineTab({ trip }: { trip: Trip }) {
               <button
                 key={i}
                 onClick={() => handleSend(sug)}
-                className="whitespace-nowrap px-4 py-2 bg-zinc-50 hover:bg-zinc-100 text-zinc-700 text-sm font-medium rounded-full transition-colors border border-zinc-200"
+                className="whitespace-nowrap px-4 py-2 bg-zinc-50 hover:bg-zinc-100 text-zinc-700 text-sm font-medium rounded-full transition-all duration-200 border border-zinc-200 active:scale-95 hover:border-zinc-300 hover:shadow-sm"
               >
                 {sug}
               </button>

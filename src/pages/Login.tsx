@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { OtterMascot } from '../components/OtterMascot';
 import { Button } from '../components/ui/Button';
 import { useTripStore } from '../store/TripContext';
+import { Input } from '../components/ui/Input';
 import { LogIn, UserPlus } from 'lucide-react';
 
 export default function Login() {
@@ -55,34 +56,34 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="w-full space-y-3 mb-4">
           {isSignUp && (
-            <input
+            <Input
               type="text"
               placeholder="Full Name"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-brand/50"
+              className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-zinc-50 focus-visible:ring-2 focus-visible:ring-brand/50 focus-visible:border-brand transition-all duration-200"
             />
           )}
-          <input
+          <Input
             type="email"
             placeholder="Email Address"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-brand/50"
+            className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-zinc-50 focus-visible:ring-2 focus-visible:ring-brand/50 focus-visible:border-brand transition-all duration-200"
           />
-          <input
+          <Input
             type="password"
             placeholder="Password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-zinc-50 focus:outline-none focus:ring-2 focus:ring-brand/50"
+            className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-zinc-50 focus-visible:ring-2 focus-visible:ring-brand/50 focus-visible:border-brand transition-all duration-200"
           />
           <Button 
             type="submit"
-            className="w-full h-12 text-base rounded-xl shadow-lg shadow-zinc-200/50 mt-2"
+            className="w-full h-12 text-base rounded-xl shadow-lg shadow-zinc-200/50 mt-2 transition-all duration-200 active:scale-[0.98]"
             disabled={isLoading}
           >
             {isLoading ? (

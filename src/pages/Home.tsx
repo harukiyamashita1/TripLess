@@ -139,7 +139,7 @@ export default function Home() {
                 </div>
 
                 <Button 
-                  className="h-14 px-8 text-lg rounded-2xl shadow-lg shadow-brand/20 bg-brand hover:bg-brand-hover text-white w-full sm:w-auto group transition-all duration-300"
+                  className="h-14 px-8 text-lg rounded-2xl shadow-lg shadow-brand/20 bg-brand hover:bg-brand-hover text-white w-full sm:w-auto group transition-all duration-300 active:scale-[0.98]"
                   onClick={() => navigate(`/trip/${featuredTrip.id}`)}
                 >
                   Continue Planning
@@ -182,7 +182,7 @@ export default function Home() {
                   Your personal AI concierge is ready to craft the perfect itinerary for your next adventure.
                 </p>
                 <Button 
-                  className="h-14 px-8 text-lg rounded-2xl shadow-lg shadow-brand/20 bg-brand hover:bg-brand-hover text-white w-full sm:w-auto group transition-all duration-300"
+                  className="h-14 px-8 text-lg rounded-2xl shadow-lg shadow-brand/20 bg-brand hover:bg-brand-hover text-white w-full sm:w-auto group transition-all duration-300 active:scale-[0.98]"
                   onClick={() => navigate('/create')}
                 >
                   <Plus className="mr-2 h-5 w-5 transition-transform group-hover:rotate-90" />
@@ -226,7 +226,7 @@ export default function Home() {
               </p>
               <Button 
                 variant="outline"
-                className="h-12 px-6 rounded-xl border-zinc-300 hover:bg-zinc-50"
+                className="h-12 px-6 rounded-xl border-zinc-300 hover:bg-zinc-50 transition-all duration-200 active:scale-95"
                 onClick={() => navigate('/create')}
               >
                 Create a Trip

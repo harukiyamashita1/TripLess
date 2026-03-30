@@ -52,7 +52,7 @@ export default function TripDetails() {
     >
       <header className="px-6 py-4 bg-white border-b border-zinc-200 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-3 flex-1 min-w-0">
-          <button onClick={() => navigate('/')} className="p-2 -ml-2 mr-2 rounded-full hover:bg-zinc-100 transition-colors">
+          <button onClick={() => navigate('/')} className="p-2 -ml-2 mr-2 rounded-full hover:bg-zinc-100 transition-all duration-200 active:scale-90">
             <ArrowLeft className="h-5 w-5 text-zinc-900" />
           </button>
           <div className="w-10 h-10 bg-brand/10 rounded-full flex items-center justify-center border border-brand/20 shrink-0 hidden sm:flex">

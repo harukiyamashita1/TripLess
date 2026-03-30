@@ -140,7 +140,7 @@ export default function CreateTrip() {
             >
               <button 
                 onClick={() => setShowAdvanced(!showAdvanced)}
-                className="flex items-center justify-between w-full py-3 px-4 -mx-4 rounded-xl hover:bg-zinc-50 transition-colors group"
+                className="flex items-center justify-between w-full py-3 px-4 -mx-4 rounded-xl hover:bg-zinc-50 transition-colors group active:bg-zinc-100"
               >
                 <span className="text-lg font-semibold text-zinc-800 group-hover:text-brand transition-colors">Optional Details</span>
                 <div className="w-8 h-8 rounded-full bg-zinc-100 flex items-center justify-center group-hover:bg-brand/10 transition-colors">
@@ -177,10 +177,10 @@ export default function CreateTrip() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
                         <div className="space-y-3">
                           <label className="text-sm font-semibold text-zinc-700 block">Travelers</label>
-                          <div className="flex items-center space-x-4 bg-zinc-50 p-2 rounded-2xl border border-zinc-200 w-fit">
-                            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:bg-white hover:shadow-sm" onClick={() => setTravelers(Math.max(1, travelers - 1))}>-</Button>
+                          <div className="flex items-center space-x-4 bg-zinc-50 p-2 rounded-2xl border border-zinc-200 w-fit transition-colors hover:border-zinc-300">
+                            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:bg-white hover:shadow-sm active:scale-95" onClick={() => setTravelers(Math.max(1, travelers - 1))}>-</Button>
                             <span className="text-xl font-semibold w-8 text-center text-zinc-900">{travelers}</span>
-                            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:bg-white hover:shadow-sm" onClick={() => setTravelers(travelers + 1)}>+</Button>
+                            <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:bg-white hover:shadow-sm active:scale-95" onClick={() => setTravelers(travelers + 1)}>+</Button>
                           </div>
                         </div>
 
@@ -209,10 +209,10 @@ export default function CreateTrip() {
                                 <button
                                   key={style}
                                   onClick={() => setBudgetStyle(style)}
-                                  className={`flex-1 py-2.5 rounded-xl text-sm font-semibold capitalize transition-all ${
+                                  className={`flex-1 py-2.5 rounded-xl text-sm font-semibold capitalize transition-all duration-200 active:scale-[0.98] ${
                                     budgetStyle === style 
                                       ? 'bg-white text-brand shadow-sm ring-1 ring-zinc-200/50' 
-                                      : 'text-zinc-500 hover:text-zinc-700 hover:bg-zinc-100'
+                                      : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50'
                                   }`}
                                 >
                                   {style}
@@ -257,10 +257,10 @@ export default function CreateTrip() {
                               <button
                                 key={type.id}
                                 onClick={() => setTripType(type.id)}
-                                className={`flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-semibold transition-all ${
+                                className={`flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
                                   isSelected 
                                     ? 'bg-brand text-white shadow-md shadow-brand/20 ring-2 ring-brand ring-offset-2' 
-                                    : 'bg-zinc-50 text-zinc-600 hover:bg-zinc-100 border border-zinc-200 hover:border-zinc-300'
+                                    : 'bg-zinc-50 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 border border-zinc-200 hover:border-zinc-300 hover:shadow-sm'
                                 }`}
                               >
                                 <Icon className={`w-4 h-4 ${isSelected ? 'text-white' : 'text-zinc-400'}`} />
@@ -278,10 +278,10 @@ export default function CreateTrip() {
                             <button
                               key={p}
                               onClick={() => setPace(p)}
-                              className={`flex-1 py-3 rounded-xl text-sm font-semibold capitalize transition-all ${
+                              className={`flex-1 py-3 rounded-xl text-sm font-semibold capitalize transition-all duration-200 active:scale-[0.98] ${
                                 pace === p 
                                   ? 'bg-white text-brand shadow-sm ring-1 ring-zinc-200/50' 
-                                  : 'text-zinc-500 hover:text-zinc-700 hover:bg-zinc-100'
+                                  : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/50'
                               }`}
                             >
                               {p}
@@ -310,7 +310,7 @@ export default function CreateTrip() {
           
           <div className="p-8 sm:px-12 sm:py-8 bg-zinc-50/80 border-t border-zinc-100 backdrop-blur-sm">
             <Button 
-              className="w-full h-16 text-xl font-semibold rounded-2xl shadow-xl shadow-brand/20 bg-brand hover:bg-brand-hover text-white transition-all hover:-translate-y-0.5"
+              className="w-full h-16 text-xl font-semibold rounded-2xl shadow-xl shadow-brand/20 bg-brand hover:bg-brand-hover text-white transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]"
               disabled={!startDate || !endDate || isGenerating}
               onClick={handleCreate}
             >

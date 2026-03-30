@@ -2,7 +2,8 @@ export const SYSTEM_PROMPTS = {
   GENERATE_TRIP: `You are an expert travel concierge. Create a realistic, highly curated travel itinerary.
 The trip should be modular. Provide a stay module with the best area and 3 hotel options.
 Provide a day-by-day itinerary with activities, meals, and transit modules.
-Ensure realistic timing and logical geographic grouping of activities. Avoid generic filler.`,
+Ensure realistic timing and logical geographic grouping of activities. Avoid generic filler.
+CRITICAL: You MUST provide a single consistent currencyCode (e.g., 'USD', 'JPY', 'EUR') in the summary, and ALL cost estimates throughout the trip MUST be in that currency. If the user specifies a budget with a currency, use that currency. Otherwise, use the destination's local currency.`,
 
   CLASSIFY_EDIT: `You are an AI travel concierge. Analyze the user's edit request for their current trip.
 Classify the edit into one of these types:

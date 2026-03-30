@@ -12,7 +12,8 @@ export const mockTrip: Trip = {
   summary: {
     title: "The Ultimate Tokyo Experience",
     description: "A perfect blend of tradition and futurism in the heart of Japan.",
-    totalCostEstimate: 2500
+    totalCostEstimate: 250000,
+    currencyCode: "JPY"
   },
   stay: {
     areaName: "Shinjuku",
@@ -21,21 +22,21 @@ export const mockTrip: Trip = {
       {
         id: "h1",
         name: "Park Hyatt Tokyo",
-        pricePerNight: 500,
+        pricePerNight: 50000,
         tags: ["Luxury", "Iconic View", "Spa"],
         description: "Sophisticated luxury with breathtaking views of the city and Mount Fuji."
       },
       {
         id: "h2",
         name: "Hotel Gracery Shinjuku",
-        pricePerNight: 180,
+        pricePerNight: 18000,
         tags: ["Modern", "Great Location", "Godzilla"],
         description: "A modern hotel famous for its life-size Godzilla head and central location."
       },
       {
         id: "h3",
         name: "Keio Plaza Hotel",
-        pricePerNight: 220,
+        pricePerNight: 22000,
         tags: ["Classic", "Family Friendly", "Large"],
         description: "A well-established hotel offering a wide range of amenities and rooms."
       }
@@ -54,7 +55,7 @@ export const mockTrip: Trip = {
           duration: "1 hour",
           title: "Arrival at Narita Airport",
           description: "Pick up your JR Pass and take the Narita Express to Shinjuku Station.",
-          costEstimate: 30,
+          costEstimate: 3000,
           tags: ["Transport", "N'EX"]
         },
         {
@@ -64,7 +65,7 @@ export const mockTrip: Trip = {
           duration: "2 hours",
           title: "Shinjuku Gyoen National Garden",
           description: "A large park and garden in Shinjuku and Shibuya. It was originally a residence of the Naitō family in the Edo period.",
-          costEstimate: 5,
+          costEstimate: 500,
           tags: ["Nature", "Garden", "Chill"]
         },
         {
@@ -74,7 +75,7 @@ export const mockTrip: Trip = {
           duration: "1.5 hours",
           title: "Dinner at Omoide Yokocho",
           description: "Also known as 'Piss Alley', this narrow street is packed with tiny yakitori stalls.",
-          costEstimate: 40,
+          costEstimate: 4000,
           tags: ["Local", "Street Food", "Atmospheric"]
         }
       ]

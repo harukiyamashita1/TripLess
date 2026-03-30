@@ -3,7 +3,8 @@ import { Trip } from '../../types';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { motion } from 'motion/react';
-import { MapPin, Star, DollarSign, ExternalLink } from 'lucide-react';
+import { MapPin, Star, ExternalLink } from 'lucide-react';
+import { formatTripCurrency, getTripCurrencyCode } from '../../lib/currency';
 
 export default function StayTab({ trip }: { trip: Trip }) {
   return (
@@ -29,7 +30,12 @@ export default function StayTab({ trip }: { trip: Trip }) {
 
       <div>
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl md:text-2xl font-bold tracking-tight">Top Hotel Picks</h3>
+          <div className="flex items-center gap-3">
+            <h3 className="text-xl md:text-2xl font-bold tracking-tight">Top Hotel Picks</h3>
+            <Badge className="bg-zinc-100 text-zinc-600 hover:bg-zinc-200 border-none">
+              Prices in {getTripCurrencyCode(trip)}
+            </Badge>
+          </div>
           <span className="text-sm font-medium text-zinc-500">{trip.stay.hotels.length} options</span>
         </div>
         
@@ -51,8 +57,7 @@ export default function StayTab({ trip }: { trip: Trip }) {
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm flex items-center font-bold text-zinc-900">
-                    <DollarSign className="w-4 h-4 text-emerald-600 mr-0.5" />
-                    {hotel.pricePerNight}
+                    {formatTripCurrency(hotel.pricePerNight, trip)}
                     <span className="text-xs text-zinc-500 font-medium ml-1">/ night</span>
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import { Card, CardContent } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { motion, AnimatePresence } from 'motion/react';
 import { Clock, MapPin, Utensils, Navigation, ChevronDown, ChevronUp, Calendar } from 'lucide-react';
+import { formatTripCurrency, getTripCurrencyCode } from '../../lib/currency';
 
 export default function ItineraryTab({ trip }: { trip: Trip }) {
   const [expandedDays, setExpandedDays] = useState<number[]>([1]);
@@ -37,7 +38,12 @@ export default function ItineraryTab({ trip }: { trip: Trip }) {
     >
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 bg-white p-6 rounded-3xl border border-zinc-100 shadow-sm">
         <div>
-          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">Your Itinerary</h2>
+          <div className="flex items-center gap-3 mb-2">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Your Itinerary</h2>
+            <Badge className="bg-zinc-100 text-zinc-600 hover:bg-zinc-200 border-none">
+              Prices in {getTripCurrencyCode(trip)}
+            </Badge>
+          </div>
           <p className="text-zinc-500 flex items-center">
             <Calendar className="w-4 h-4 mr-2" />
             {trip.itinerary.length} Days • {trip.pace} pace
@@ -123,7 +129,7 @@ export default function ItineraryTab({ trip }: { trip: Trip }) {
                                 <>
                                   <div className="w-1 h-1 rounded-full bg-zinc-300" />
                                   <span className="text-sm text-zinc-600 font-medium">
-                                    Est. ${mod.costEstimate}
+                                    Est. {formatTripCurrency(mod.costEstimate, trip)}
                                   </span>
                                 </>
                               )}

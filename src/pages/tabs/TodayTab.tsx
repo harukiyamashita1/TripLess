@@ -4,6 +4,7 @@ import { Card, CardContent } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { motion } from 'motion/react';
 import { MapPin, Clock, Navigation, CheckCircle2, ArrowRight } from 'lucide-react';
+import { formatTripCurrency, getTripCurrencyCode } from '../../lib/currency';
 
 export default function TodayTab({ trip }: { trip: Trip }) {
   // Mock "today" by just taking the first day
@@ -33,6 +34,9 @@ export default function TodayTab({ trip }: { trip: Trip }) {
         <Badge variant="secondary" className="bg-emerald-100 text-emerald-800 border-emerald-200 px-4 py-2 rounded-xl text-sm w-fit">
           <CheckCircle2 className="w-4 h-4 mr-2" />
           On Track
+        </Badge>
+        <Badge className="bg-zinc-100 text-zinc-600 hover:bg-zinc-200 border-none px-4 py-2 rounded-xl text-sm w-fit mt-2 md:mt-0">
+          Prices in {getTripCurrencyCode(trip)}
         </Badge>
       </div>
 
@@ -89,6 +93,12 @@ export default function TodayTab({ trip }: { trip: Trip }) {
                       <MapPin className="w-5 h-5 mr-2 shrink-0 text-zinc-400" />
                       <span className="line-clamp-2">{mod.location}</span>
                     </p>
+                  )}
+                  
+                  {mod.costEstimate > 0 && (
+                    <div className="mt-3 inline-flex items-center text-sm font-medium text-zinc-600 bg-zinc-100 px-3 py-1.5 rounded-lg">
+                      Est. {formatTripCurrency(mod.costEstimate, trip)}
+                    </div>
                   )}
                   
                   {isNext && (

@@ -16,8 +16,9 @@ export const tripSchema: Schema = {
         title: { type: Type.STRING },
         description: { type: Type.STRING },
         totalCostEstimate: { type: Type.NUMBER },
+        currencyCode: { type: Type.STRING },
       },
-      required: ['title', 'description', 'totalCostEstimate'],
+      required: ['title', 'description', 'totalCostEstimate', 'currencyCode'],
     },
     stay: {
       type: Type.OBJECT,

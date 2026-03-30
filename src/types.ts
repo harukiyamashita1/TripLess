@@ -49,6 +49,7 @@ export interface Trip {
     title: string;
     description: string;
     totalCostEstimate: number;
+    currencyCode?: string;
   };
   stay: StayModule;
   itinerary: DayPlan[];

@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { generateTrip } from '../services/ai';
 import { useTripStore } from '../store/TripContext';
 import { OtterMascot } from '../components/OtterMascot';
+import { SUPPORTED_CURRENCIES, DEFAULT_CURRENCY_CODE, inferCurrencyCodeFromDestination } from '../lib/currency';
 
 const TRIP_TYPES = [
   { id: 'any', label: 'Any', icon: Map },
@@ -30,6 +31,7 @@ export default function CreateTrip() {
   const [budgetMode, setBudgetMode] = useState<'style' | 'exact'>('style');
   const [budgetStyle, setBudgetStyle] = useState('balanced');
   const [exactBudget, setExactBudget] = useState('');
+  const [currencyCode, setCurrencyCode] = useState(DEFAULT_CURRENCY_CODE);
   const [pace, setPace] = useState('medium');
   const [tripType, setTripType] = useState('any');
   const [additionalNotes, setAdditionalNotes] = useState('');
@@ -45,7 +47,7 @@ export default function CreateTrip() {
     navigate('/loading', { state: { destination } });
     
     try {
-      const finalBudget = budgetMode === 'exact' && exactBudget ? `Exact amount: $${exactBudget}` : budgetStyle;
+      const finalBudget = budgetMode === 'exact' && exactBudget ? `Exact amount: ${exactBudget} ${currencyCode}` : budgetStyle;
       const trip = await generateTrip(destination, startDate, endDate, travelers, finalBudget, pace, tripType, additionalNotes, user?.id);
       trip.id = uuidv4(); // Ensure unique ID
       addTrip(trip);
@@ -162,7 +164,12 @@ export default function CreateTrip() {
                         <Input 
                           placeholder="e.g. Tokyo, Paris, or leave blank for a surprise" 
                           value={destination}
-                          onChange={(e) => setDestination(e.target.value)}
+                          onChange={(e) => {
+                            setDestination(e.target.value);
+                            if (e.target.value) {
+                              setCurrencyCode(inferCurrencyCodeFromDestination(e.target.value));
+                            }
+                          }}
                           className="h-14 rounded-xl bg-zinc-50 border-zinc-200 focus:bg-white transition-colors text-lg"
                         />
                       </div>
@@ -213,15 +220,28 @@ export default function CreateTrip() {
                               ))}
                             </div>
                           ) : (
-                            <div className="relative">
-                              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400 font-semibold text-lg">$</span>
-                              <Input 
-                                type="number" 
-                                placeholder="e.g. 2000" 
-                                value={exactBudget}
-                                onChange={(e) => setExactBudget(e.target.value)}
-                                className="pl-8 h-14 rounded-xl bg-zinc-50 border-zinc-200 focus:bg-white transition-colors text-lg font-medium"
-                              />
+                            <div className="space-y-2">
+                              <div className="flex gap-2">
+                                <select
+                                  value={currencyCode}
+                                  onChange={(e) => setCurrencyCode(e.target.value)}
+                                  className="h-14 rounded-xl bg-zinc-50 border border-zinc-200 focus:bg-white transition-colors text-lg font-medium px-4 outline-none focus:border-brand focus:ring-1 focus:ring-brand"
+                                >
+                                  {SUPPORTED_CURRENCIES.map(c => (
+                                    <option key={c.code} value={c.code}>{c.code}</option>
+                                  ))}
+                                </select>
+                                <Input 
+                                  type="number" 
+                                  placeholder="e.g. 2000" 
+                                  value={exactBudget}
+                                  onChange={(e) => setExactBudget(e.target.value)}
+                                  className="flex-1 h-14 rounded-xl bg-zinc-50 border-zinc-200 focus:bg-white transition-colors text-lg font-medium"
+                                />
+                              </div>
+                              <p className="text-xs text-zinc-500">
+                                Trip prices will be shown in the destination's local currency.
+                              </p>
                             </div>
                           )}
                         </div>

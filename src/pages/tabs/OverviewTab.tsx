@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Ca
 import { Badge } from '../../components/ui/Badge';
 import { motion } from 'motion/react';
 import { Users, Wallet, Activity, MapPin, Calendar, Compass } from 'lucide-react';
+import { formatTripCurrency, getTripCurrencyCode } from '../../lib/currency';
 
 export default function OverviewTab({ trip }: { trip: Trip }) {
   const heroImage = `https://picsum.photos/seed/${trip.destination.replace(/\s+/g, '')}/1200/400`;
@@ -28,6 +29,9 @@ export default function OverviewTab({ trip }: { trip: Trip }) {
         <div className="absolute bottom-0 left-0 p-6 md:p-8 z-20 text-white w-full bg-gradient-to-t from-zinc-900/90 via-zinc-900/40 to-transparent">
           <Badge className="bg-white/20 hover:bg-white/30 text-white border-none backdrop-blur-md mb-3">
             {trip.summary.title}
+          </Badge>
+          <Badge className="bg-black/40 hover:bg-black/50 text-white border-none backdrop-blur-md mb-3 ml-2">
+            Prices in {getTripCurrencyCode(trip)}
           </Badge>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-2 drop-shadow-md">{trip.destination}</h2>
           <div className="flex items-center text-white/90 text-sm md:text-base font-medium drop-shadow-sm">
@@ -54,9 +58,9 @@ export default function OverviewTab({ trip }: { trip: Trip }) {
                   <Wallet className="h-6 w-6 text-emerald-600" />
                 </div>
                 <p className="text-xs text-zinc-500 font-medium uppercase tracking-wider mb-1">Total Est.</p>
-                <p className="text-2xl font-bold text-zinc-900">${trip.summary.totalCostEstimate}</p>
+                <p className="text-2xl font-bold text-zinc-900">{formatTripCurrency(trip.summary.totalCostEstimate, trip)}</p>
                 {trip.travelers > 1 && (
-                  <p className="text-sm text-zinc-400 mt-1">~${Math.round(trip.summary.totalCostEstimate / trip.travelers)}/person</p>
+                  <p className="text-sm text-zinc-400 mt-1">~{formatTripCurrency(Math.round(trip.summary.totalCostEstimate / trip.travelers), trip)}/person</p>
                 )}
               </CardContent>
             </Card>

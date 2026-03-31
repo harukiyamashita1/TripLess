@@ -110,10 +110,10 @@ export default function Home() {
               </h2>
 
               <p className="text-zinc-400 text-lg md:text-xl mb-8 leading-relaxed max-w-lg">
-                {featuredTrip
-                  ? `Your latest journey to ${featuredTrip.destination} is ready whenever you want to keep planning, and you can always start a new one too.`
-                  : `${user ? `Welcome back, ${user.name.split(' ')[0]}. ` : ''}Your personal AI concierge is ready to craft the perfect itinerary for your next adventure.`}
-              </p>
+  {featuredTrip
+    ? 'Ready for your next trip? Pick up your latest journey or start a new one.'
+    : `${user ? `Welcome back, ${user.name.split(' ')[0]}. ` : ''}Your personal AI concierge is ready to craft the perfect itinerary for your next adventure.`}
+</p>
 
               <div className="flex flex-col sm:flex-row gap-3">
                 {featuredTrip ? (

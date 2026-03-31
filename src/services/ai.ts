@@ -28,8 +28,8 @@ export async function generateTrip(
     additionalNotes
   );
 
-  // Ensure ID is set
-  if (!trip.id) trip.id = uuidv4();
+  // Always ensure a unique ID is set
+  trip.id = uuidv4();
 
   // If user is logged in, save to Supabase
   if (userId) {

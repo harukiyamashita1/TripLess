@@ -16,15 +16,22 @@ export default function Login() {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
     
-    // Simulate a network request for authentication
-    setTimeout(() => {
-      login(email, isSignUp ? name : undefined);
+    try {
+      await login(email, password, isSignUp ? name : undefined);
       navigate('/');
-    }, 800);
+    } catch (err: any) {
+      console.error("Login error:", err);
+      setError(err.message || "An error occurred during authentication.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -55,6 +62,11 @@ export default function Login() {
         </p>
 
         <form onSubmit={handleSubmit} className="w-full space-y-3 mb-4">
+          {error && (
+            <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-100 rounded-xl">
+              {error}
+            </div>
+          )}
           {isSignUp && (
             <Input
               type="text"

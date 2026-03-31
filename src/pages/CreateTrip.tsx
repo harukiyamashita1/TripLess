@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Textarea } from '../components/ui/Textarea';
@@ -49,7 +48,6 @@ export default function CreateTrip() {
     try {
       const finalBudget = budgetMode === 'exact' && exactBudget ? `Exact amount: ${exactBudget} ${currencyCode}` : budgetStyle;
       const trip = await generateTrip(destination, startDate, endDate, travelers, finalBudget, pace, tripType, additionalNotes, user?.id);
-      trip.id = uuidv4(); // Ensure unique ID
       addTrip(trip);
       navigate(`/trip/${trip.id}`);
     } catch (error) {

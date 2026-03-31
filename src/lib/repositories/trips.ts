@@ -3,6 +3,11 @@ import { Trip, DayPlan, TripModule } from '../../types';
 
 export const tripRepository = {
   async createTrip(trip: Trip, userId: string) {
+    if (!supabase) {
+      console.warn('Supabase client not initialized. Skipping createTrip.');
+      return trip;
+    }
+
     // 1. Insert trip
     const { data: tripData, error: tripError } = await supabase
       .from('trips')
@@ -62,6 +67,11 @@ export const tripRepository = {
   },
 
   async getTrip(tripId: string): Promise<Trip | null> {
+    if (!supabase) {
+      console.warn('Supabase client not initialized. Skipping getTrip.');
+      return null;
+    }
+
     const { data: tripData, error: tripError } = await supabase
       .from('trips')
       .select(`
@@ -80,13 +90,13 @@ export const tripRepository = {
     }
 
     // Map database structure to Trip interface
-    const itinerary: DayPlan[] = tripData.trip_days
+    const itinerary: DayPlan[] = (tripData.trip_days || [])
       .sort((a: any, b: any) => a.day_number - b.day_number)
       .map((day: any) => ({
         dayNumber: day.day_number,
         date: day.date,
         theme: day.theme,
-        modules: day.trip_day_items
+        modules: (day.trip_day_items || [])
           .sort((a: any, b: any) => a.sort_order - b.sort_order)
           .map((item: any) => ({
             id: item.id,
@@ -96,7 +106,7 @@ export const tripRepository = {
             title: item.title,
             description: item.description,
             costEstimate: Number(item.cost_estimate),
-            tags: item.tags,
+            tags: item.tags || [],
             location: item.location
           }))
       }));
@@ -116,31 +126,68 @@ export const tripRepository = {
   },
 
   async listUserTrips(userId: string): Promise<Trip[]> {
+    if (!supabase) {
+      console.warn('Supabase client not initialized. Skipping listUserTrips.');
+      return [];
+    }
+
     const { data, error } = await supabase
       .from('trips')
-      .select('*')
+      .select(`
+        *,
+        trip_days (
+          *,
+          trip_day_items (*)
+        )
+      `)
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
 
-    // For listing, we might just return basic info or full trips
-    // Here we return partial trips as per the current UI needs
-    return data.map((trip: any) => ({
-      id: trip.id,
-      destination: trip.destination,
-      startDate: trip.start_date,
-      endDate: trip.end_date,
-      travelers: trip.travelers,
-      budgetStyle: trip.budget_style,
-      pace: trip.pace,
-      summary: trip.summary,
-      stay: trip.stay,
-      itinerary: [] // Don't load full itinerary for list
-    }));
+    return data.map((tripData: any) => {
+      const itinerary: DayPlan[] = (tripData.trip_days || [])
+        .sort((a: any, b: any) => a.day_number - b.day_number)
+        .map((day: any) => ({
+          dayNumber: day.day_number,
+          date: day.date,
+          theme: day.theme,
+          modules: (day.trip_day_items || [])
+            .sort((a: any, b: any) => a.sort_order - b.sort_order)
+            .map((item: any) => ({
+              id: item.id,
+              type: item.type,
+              time: item.time,
+              duration: item.duration,
+              title: item.title,
+              description: item.description,
+              costEstimate: Number(item.cost_estimate),
+              tags: item.tags || [],
+              location: item.location
+            }))
+        }));
+
+      return {
+        id: tripData.id,
+        destination: tripData.destination,
+        startDate: tripData.start_date,
+        endDate: tripData.end_date,
+        travelers: tripData.travelers,
+        budgetStyle: tripData.budget_style,
+        pace: tripData.pace,
+        summary: tripData.summary,
+        stay: tripData.stay,
+        itinerary
+      };
+    });
   },
 
   async updateTrip(trip: Trip) {
+    if (!supabase) {
+      console.warn('Supabase client not initialized. Skipping updateTrip.');
+      return;
+    }
+
     // This is more complex because of modularity.
     // For now, let's implement a simple full update or localized update logic.
     // A real production app would use a transaction or a more granular approach.
@@ -209,5 +256,19 @@ export const tripRepository = {
 
       if (itemsError) throw itemsError;
     }
+  },
+
+  async deleteTrip(tripId: string) {
+    if (!supabase) {
+      console.warn('Supabase client not initialized. Skipping deleteTrip.');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('trips')
+      .delete()
+      .eq('id', tripId);
+
+    if (error) throw error;
   }
 };

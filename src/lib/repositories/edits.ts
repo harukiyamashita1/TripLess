@@ -3,6 +3,11 @@ import { ChangeSummary } from '../../types';
 
 export const editRepository = {
   async saveEdit(tripId: string, userId: string, request: string, classification: any, patch: any, changeSummary: ChangeSummary) {
+    if (!supabase) {
+      console.warn('Supabase client not initialized. Skipping saveEdit.');
+      return null;
+    }
+
     const { data, error } = await supabase
       .from('trip_edits')
       .insert({
@@ -21,6 +26,11 @@ export const editRepository = {
   },
 
   async listTripEdits(tripId: string) {
+    if (!supabase) {
+      console.warn('Supabase client not initialized. Skipping listTripEdits.');
+      return [];
+    }
+
     const { data, error } = await supabase
       .from('trip_edits')
       .select('*')

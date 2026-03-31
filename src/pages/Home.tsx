@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTripStore } from '../store/TripContext';
 import { Button } from '../components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/Card';
-import { Plus, MapPin, Calendar, Compass, LogOut, ArrowRight, Sparkles, Trash2, Activity } from 'lucide-react';
+import { Card, CardContent } from '../components/ui/Card';
+import { Plus, Calendar, Compass, LogOut, ArrowRight, Sparkles, Trash2, Activity } from 'lucide-react';
 import { motion } from 'motion/react';
 import { OtterMascot } from '../components/OtterMascot';
 import { calculateTripEngagement } from '../lib/tripEngagement';
@@ -299,9 +299,7 @@ export default function Home() {
             <span className="text-sm font-medium">TripLess AI Travel</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-zinc-400">
-            <a href="#" className="hover:text-zinc-900 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-zinc-900 transition-colors">Terms</a>
-            <a href="#" className="hover:text-zinc-900 transition-colors">Contact</a>
+            <span>© {new Date().getFullYear()} TripLess</span>
           </div>
         </div>
       </footer>

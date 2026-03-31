@@ -103,14 +103,15 @@ export default function TodayTab({ trip }: { trip: Trip }) {
                   
                   {isNext && (
                     <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                      <button className="flex-1 bg-brand text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center hover:bg-brand-hover transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98]">
+                      <a 
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mod.location || mod.title)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex-1 bg-brand text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center hover:bg-brand-hover transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98]"
+                      >
                         <Navigation className="w-4 h-4 mr-2" />
                         Start Navigation
-                      </button>
-                      <button className="flex-1 bg-white border-2 border-zinc-200 text-zinc-700 font-semibold py-3 px-4 rounded-xl flex items-center justify-center hover:bg-zinc-50 hover:border-zinc-300 transition-all duration-200 active:scale-[0.98]">
-                        Find Alternatives
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </button>
+                      </a>
                     </div>
                   )}
                 </CardContent>

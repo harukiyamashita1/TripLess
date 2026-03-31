@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Trip, User } from '../types';
+import { tripRepository } from '../lib/repositories/trips';
+import { supabase } from '../lib/supabase/client';
 
 interface TripContextType {
   trips: Trip[];
@@ -9,8 +11,8 @@ interface TripContextType {
   deleteTrip: (tripId: string) => void;
   setCurrentTrip: (trip: Trip | null) => void;
   user: User | null;
-  login: (email: string, name?: string) => void;
-  logout: () => void;
+  login: (email: string, password?: string, name?: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const TripContext = createContext<TripContextType | undefined>(undefined);
@@ -36,22 +38,83 @@ export const TripProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
+  // Fetch trips from Supabase when user logs in
+  useEffect(() => {
+    if (user && supabase) {
+      tripRepository.listUserTrips(user.id).then(data => {
+        if (data && data.length > 0) {
+          setTrips(prev => {
+            const newTrips = [...prev];
+            data.forEach(t => {
+              const existingIndex = newTrips.findIndex(nt => nt.id === t.id);
+              if (existingIndex >= 0) {
+                newTrips[existingIndex] = t;
+              } else {
+                newTrips.push(t);
+              }
+            });
+            return newTrips;
+          });
+        }
+      }).catch(console.error);
+    }
+  }, [user]);
+
   // Save to local storage whenever trips change
   useEffect(() => {
     localStorage.setItem('guestTrips', JSON.stringify(trips));
   }, [trips]);
 
-  const login = (email: string, name?: string) => {
-    const mockUser: User = {
-      id: Math.random().toString(36).substring(2, 9),
-      email,
-      name: name || email.split('@')[0],
-    };
-    setUser(mockUser);
-    localStorage.setItem('mockUser', JSON.stringify(mockUser));
+  const login = async (email: string, password?: string, name?: string) => {
+    if (supabase && password) {
+      if (name) {
+        // Sign up
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { name }
+          }
+        });
+        if (error) throw error;
+        if (data.user) {
+          setUser({
+            id: data.user.id,
+            email: data.user.email!,
+            name: data.user.user_metadata?.name || email.split('@')[0]
+          });
+        }
+      } else {
+        // Sign in
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+        if (error) throw error;
+        if (data.user) {
+          setUser({
+            id: data.user.id,
+            email: data.user.email!,
+            name: data.user.user_metadata?.name || email.split('@')[0]
+          });
+        }
+      }
+    } else {
+      // Mock fallback
+      const mockUser: User = {
+        id: Math.random().toString(36).substring(2, 9),
+        email,
+        name: name || email.split('@')[0],
+      };
+      setUser(mockUser);
+      localStorage.setItem('mockUser', JSON.stringify(mockUser));
+    }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     setUser(null);
     localStorage.removeItem('mockUser');
   };
@@ -68,10 +131,17 @@ export const TripProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const deleteTrip = (tripId: string) => {
+  const deleteTrip = async (tripId: string) => {
     setTrips((prev) => prev.filter(t => t.id !== tripId));
     if (currentTrip?.id === tripId) {
       setCurrentTrip(null);
+    }
+    if (user) {
+      try {
+        await tripRepository.deleteTrip(tripId);
+      } catch (error) {
+        console.error("Failed to delete trip from Supabase", error);
+      }
     }
   };
 

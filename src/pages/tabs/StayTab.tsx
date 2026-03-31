@@ -65,6 +65,15 @@ export default function StayTab({ trip }: { trip: Trip }) {
                 <CardContent className="p-6 flex-1 flex flex-col">
                   <div className="flex justify-between items-start mb-2">
                     <CardTitle className="text-xl font-bold leading-tight group-hover:text-brand transition-colors">{hotel.name}</CardTitle>
+                    <a 
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(hotel.name + ' ' + trip.stay.areaName)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-zinc-400 hover:text-brand transition-colors p-1"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ExternalLink className="w-5 h-5" />
+                    </a>
                   </div>
                   
                   <p className="text-sm text-zinc-600 mb-6 line-clamp-3 leading-relaxed flex-1">{hotel.description}</p>

@@ -96,14 +96,16 @@ export default function OverviewTab({ trip }: { trip: Trip }) {
               <Compass className="w-40 h-40" />
             </div>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Expected Weather</CardTitle>
+              <CardTitle className="text-sm font-medium text-zinc-500 uppercase tracking-wider">Total Activities</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-end gap-3 mb-2">
-                <span className="text-4xl font-bold text-zinc-900">72°</span>
-                <span className="text-lg font-medium text-zinc-500 mb-1">F</span>
+                <span className="text-4xl font-bold text-zinc-900">
+                  {trip.itinerary.reduce((acc, day) => acc + day.modules.length, 0)}
+                </span>
+                <span className="text-lg font-medium text-zinc-500 mb-1">planned</span>
               </div>
-              <p className="text-sm text-zinc-600">Mostly sunny with a chance of light rain in the evenings.</p>
+              <p className="text-sm text-zinc-600">Across {trip.itinerary.length} days of adventure.</p>
             </CardContent>
           </Card>
         </div>

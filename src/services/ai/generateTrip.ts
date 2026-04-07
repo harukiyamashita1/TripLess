@@ -44,7 +44,7 @@ If no specific destination was provided, pick a fantastic destination and make s
   }
 
   const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-3.1-pro-preview",
     contents: prompt,
     config: {
       responseMimeType: "application/json",
